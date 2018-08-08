@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="aaa">
+    {{msg}}
+    <div v-if="seen">你可以看到了</div>
+    <div v-else>你看不见我</div>
+    <span v-if="ok">打字真难！</span>
+</div>
+
+<script src="vue.js"></script>
+<script>
+    let vm = new Vue({
+        el:'#aaa',
+        data:{
+            msg:'HelloWorld',
+            seen:true,
+            ok:true
+        }
+    });
+</script>
+</body>
+</html>
