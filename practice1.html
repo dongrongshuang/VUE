@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .red{
+            background:#ff0000;
+        }
+        /*.button1{*/
+            /*border: 1px solid;*/
+            /*border-radius: 40px;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<div id="header">
+        <!--<p @click="touch" :class="{red: isRed}">衣服</p>-->
+        <!--<p @click="touch" :class="{red: isRed}">裤子</p>-->
+        <!--<p>鞋</p>-->
+        <!--<p>iphone</p>-->
+        <!--<p>ipad</p>-->
+    <!--<button @click="删除选中">删除选中</button>-->
+    <form action="">
+        名称：<input type="text" placeholder="请输入产品名称" >
+        价格：<input type="text" placeholder="0" >
+        <!--价格：<input type="text" placeholder="0" @keyon="sum($event)" v-module="sum">-->
+            <button v-on:click="add($event)">增加</button>
+            <!--<h1>{{count}}</h1>-->
+        <input type="text" placeholder="请输入搜索关键字">
+            <button>查询</button>
+        <div id="list" v-for = "(goods) in content" @click="touch(goods)" :class="{red: goods.isRed}">
+            <input type="checkbox">
+            <label for="checkbox">{{goods.name}} {{goods.price}}</label>
+        </div>
+
+    </form>
+</div>
+
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el:'#header',
+        data:{
+            clsName:'red',
+            content:[
+                {
+                name:'衣服', isRed:false,price:120
+            } ,{
+                name:'裤子', isRed:false ,price:140
+            },{
+                name:'鞋',isRed:false,price:12400
+            } ,{
+                name:'iPad',isRed:false,price:3880
+            }
+            ],
+            name:0,
+            price:0
+            // goods:0,
+            // num:0
+        },
+        methods:{
+            touch(goods){
+                goods.isRed= !goods.isRed;
+            },
+            add(e){
+                console.log(name , price)
+            }
+            // add(n,e){
+            //     this.count += n;
+            //     console.log(e)
+            // },
+            // saleings(e){
+            //     // if(e.keyCode ==13){
+            //         this.count += parseInt(this.num);
+            //     }
+            }
+    })
+
+</script>
+</body>
+</html>
