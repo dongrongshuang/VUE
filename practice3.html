@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <title>Title</title>
+    <style>
+        .red{
+            background: red;
+        }
+        .add-form{
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app" class="text-center">
+    <h1>todolist</h1>
+    <hr>
+    <form class="form-inline" @submit.prevent>
+        <div class="form-group">
+            <input  type="text" class="form-control"  placeholder="请输入商品名称" v-model="keyword">
+        </div>
+        <button @click='search' type="submit" class="btn btn-default glyphicon glyphicon-search">搜索</button>
+    </form>
+
+
+    <form class="form-inline add-form" @submit.prevent add-form>
+        <div class="form-group">
+            <label for="product-name">商品名称</label>
+            <input v-model="productName" type="text" class="form-control" placeholder="请输入商品名称">
+        </div>
+        <div class="form-group">
+            <label for="product-price">商品价格</label>
+            <input v-model="productPrice" type="number" class="form-control" id="exampleInputEmail2" placeholder="请输入商品价格">
+        </div>
+        <button @click='add' type="submit" class="btn btn-default glyphicon glyphicon-plus">添加</button>
+    </form>
+    <table  class="table table-bordered">
+        <thead>
+        <tr class="danger">
+            <td>选择</td>
+            <td>商品名称</td>
+            <td>商品价格</td>
+            <td>删除</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(product, index) in content" @click="touch(product)" :class="product.isRed? 'red' :''">
+            <td>
+                <input type="checkbox" @click.stop v-model="checkList" :value="index">
+            </td>
+            <td>{{product.productName}}</td>
+            <td>{{product.productPrice}}</td>
+            <td>
+                <button class="btn btn-danger glyphicon glyphicon-remove btn-xs" @click="del(index)" ></button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button class="btn btn-info btn-xs" @click="delChecked">删除选中</button>
+            </td>
+            <td colspan="3">总价：{{total}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el:'#app',
+        data:{
+            content:[{
+                productName:'衣服',
+                productPrice:120,
+                isRed:false
+            },
+            {
+                productName:'裤子',
+                productPrice:220,
+                isRed:false
+            },
+            {
+                productName:'鞋',
+                productPrice:12050,
+                isRed:false
+            },
+            {
+                productName:'iPad',
+                productPrice:3880,
+                isRed:false
+            }
+            ],
+            productName:'',
+            productPrice:0 ,
+            checkList:[],
+            keyword:''
+        },
+        methods:{
+            touch(product){
+                product.isRed = !product.isRed//isRed取反
+            },
+            //怎么从数组里删除任意一个元素
+            del(index){
+                this.content.splice(index ,1)
+                this.content.index=[]
+            },
+            delChecked(){
+                this.content=this.content.filter((elem,index)=>{
+                    if(!this.checkList.includes(index)){
+                        return elem;
+                    }
+                });
+                    this.checkList=[]
+            },
+            add(){
+                this.content.push({productName:this.productName,isRed:false,productPrice:this.productPrice}),
+                this.productName='',
+                 this.productPrice=0
+            },
+            search(){
+                this.content = this.content.filter((elem,index) =>{
+                    if(elem.productName.includes(this.keyword)){
+                        return elem;
+                    }
+                })
+            }
+        },
+        computed:{
+            total(){
+                return this.content.reduce((sum ,elem) =>{  //第一个参数是一个方法 求和 每次遍历的那个的元素  第二个求和的初始值
+                    if(elem.isRed){
+                        sum += parseInt(elem.productPrice)
+                    }
+                    return sum;
+                },0)
+            }
+        }
+    })
+</script>
+</body>
+</html>
