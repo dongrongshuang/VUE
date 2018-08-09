@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .red{
+            background:#ff0000;
+        }
+        /*.button1{*/
+            /*border: 1px solid;*/
+            /*border-radius: 40px;*/
+        /*}*/
+        #list .price{
+            float: right;
+        }
+    </style>
+</head>
+<body>
+<div id="header">
+    <form @submit.prevent>
+        名称：<input type="text" placeholder="请输入产品名称" v-model="name" >
+        价格：<input type="text" placeholder="0"  v-model.number="price">
+            <button v-on:click="add()">增加</button>
+        <br>
+        <input type="text" placeholder="请输入搜索关键字" v-model="select">
+            <button @click="search">查询</button>
+        <div id="list" v-for = "(goods,index) in content" @click="touch(goods)" :class="{red: goods.isRed}">
+            <input type="checkbox"  @click.stop v-model="checkList" :value="index">
+                <button @click="del(index)" @click.stop>[X]</button>
+                <span>{{goods.name}}</span>
+
+            <div class="price">{{goods.price}}</div>
+        </div>
+    </form>
+    <button @click="delChecked">删除选中</button>
+    <span >总价：{{total}}</span>
+</div>
+
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el:'#header',
+        data:{
+            clsName:'red',
+            content:[
+                {
+                name:'衣服', isRed:false,price:120
+            } ,{
+                name:'裤子', isRed:false ,price:140
+            },{
+                name:'鞋',isRed:false,price:12400
+            } ,{
+                name:'iPad',isRed:false,price:3880
+            }
+            ],
+            name:'',
+            price:'',
+            select:'',
+            // total:'',
+            checkList:[]
+        },
+        methods: {
+            touch(goods) {
+                goods.isRed = !goods.isRed;
+                // if (goods.isRed == true) {
+                //     this.sum += Number(goods.price)
+                // } else {
+                //     this.sum -= Number(goods.price)
+                // }
+            },
+            del(index) {
+                this.content.splice(index, 1);
+                this.checkList=[]
+            },
+            delChecked(){
+                this.content = this.content.filter((elem, index) =>{
+                    if (!this.checkList.includes(index)) {
+                        return elem;
+                    }
+                });
+                this.checkList = [];
+            },
+            add() {
+                this.content.push({name: this.name, isRed: false, price: this.price}),
+                this.name='',
+                this.price=0
+            },
+            // search(){
+            //     this.content = this.content.filter(function(elem,index) {
+            //         if (elem.name.includes(this.keywords)){
+            //             return elem;
+            //         }
+            //     }.bind(this));
+            // }
+            search(){
+                this.content = this.content.filter((elem,index) =>{
+                    if(elem.name.includes(this.select)){
+                        return elem;
+                    }
+                });
+            }
+        },
+        computed:{
+            total(){
+                return this.content.reduce((sum,elem) =>{
+                    if(elem.isRed){
+                        sum += parseInt(elem.price)
+                    }
+                    return sum;
+                },0)
+            },
+        }
+    })
+
+</script>
+</body>
+</html>
